@@ -12,8 +12,12 @@ The Android Cluster Toolkit helps organize and manipulate a collection of Androi
 
 ## Hardware Components
 
-There are no special hardware components, though D-Link DUB-H7 hubs seem to work well. 
+There are no special hardware components, though various hardware has been used with varying results.
 
+### Good Hardware
+D-Link DUB-H7 hubs seem to work well. 
+
+### Bad Hardware
 Although it looks cool and has a lot of ports, the Manhattan MondoHub is not recommended. It simply doesn't have enough power to support all ports being in use at the same time.
 
 ## Software Components
