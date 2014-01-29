@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+
+#
+# Android Cluster Toolkit
+#
+# mbb - execute a command on the selected device(s) using busybox
+#
+# (c) 2012-2014 Joshua J. Drake (jduck)
+#
+
+bfn = __FILE__
+while File.symlink?(bfn)
+  bfn = File.expand_path(File.readlink(bfn), File.dirname(bfn))
+end
+$:.unshift(File.dirname(bfn))
+
+require 'devices'
+
+
+devid = nil
+if ARGV.length < 1
+  $stderr.puts "usage: mbb <device names or serials separated by commas> <parameters to adb client>"
+  exit(1)
+end
+
+selected_devices = ARGV.shift.split(',')
+
+do_all = (selected_devices.first == ".")
+
+$devices.each { |dev|
+
+  next if not do_all and not (selected_devices.include? dev[:name] or selected_devices.include? dev[:serial])
+
+  if dev[:disabled]
+    puts "[!] Warning: The selected device is marked disabled. It may not be present."
+  end
+
+  puts "[*] #{dev[:name]} (ANDROID_SERIAL=\"#{dev[:serial]}\") ..."
+
+  cmd = [ 'adb', '-s', dev[:serial], 'shell', '/data/local/tmp/busybox', ]
+  cmd += ARGV
+  system(*cmd)
+  puts ""
+}
+
