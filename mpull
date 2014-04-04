@@ -19,7 +19,7 @@ require 'madb'
 
 
 # process args
-if ARGV.length < 2 or not parse_global_options()
+if not parse_global_options() or ARGV.length < 1
   $stderr.puts "usage: mpull [-1v] -d <device names or serials separated by commas> <path to pull>"
   exit(1)
 end

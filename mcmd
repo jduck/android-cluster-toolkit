@@ -19,7 +19,7 @@ require 'madb'
 
 
 # process args
-if ARGV.length < 3 or not parse_global_options()
+if not parse_global_options() or ARGV.length < 1
   $stderr.puts "usage: mcmd [-1v] -d <device names or serials separated by commas> <parameters to busybox>"
   exit(1)
 end

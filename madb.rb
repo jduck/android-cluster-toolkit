@@ -58,6 +58,8 @@ def is_selected(dev)
   return true if $do_all
 
   sel = $selected_devices
+  return false if not sel
+
   if sel.length > 0 and (sel.include? dev[:name] or sel.include? dev[:serial])
     return true
   end

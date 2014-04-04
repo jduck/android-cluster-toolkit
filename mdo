@@ -19,7 +19,7 @@ require 'madb'
 
 
 # process args
-if ARGV.length < 3 or not parse_global_options()
+if not parse_global_options() or ARGV.length < 1
   $stderr.puts "usage: mdo [-1v] -d <device names or serials separated by commas> <parameters to adb client>"
   exit(1)
 end
@@ -36,8 +36,8 @@ case cmd
     # allow for all usage patterns
 
   when 'shell'
-    if ARGV.length < 2 and ($do_all or $selected_devices.length > 1)
-      $stderr.puts "[!] the #{cmd} command requires an argument when used with multiple devices"
+    if ARGV.length < 2 and $one_line
+      $stderr.puts "[!] the #{cmd} command requires an argument when used in single-line mode"
       exit(1)
     end
 
@@ -51,12 +51,19 @@ case cmd
     if $do_all or $selected_devices.length > 1
       $stderr.puts "[!] use ./mpull to pull from multiple devices"
       exit(1)
+    elsif ARGV.length < 2
+      $stderr.puts "[!] the #{cmd} command requires an argument"
+      exit(1)
     end
 
   when 'logcat'
     if $do_all or $selected_devices.length > 1
       $stderr.puts "[!] specify a single device for logcat"
       exit(1)
+    end
+
+    if $one_line
+      $stderr.puts "[!] single-line mode is not compatible with logcat"
     end
 
   else
