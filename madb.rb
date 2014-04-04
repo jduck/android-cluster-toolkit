@@ -6,6 +6,9 @@
 # (c) 2012-2014 Joshua J. Drake (jduck)
 #
 
+require 'open3'
+
+
 def plural(num)
   return "" if num == 1
   return "s"
@@ -49,4 +52,37 @@ def print_col_prefix(include_serial, widths, dev)
   $stdout.flush
 end
  
+
+def adb_scan()
+# get a list of devices via 'adb devices'
+  adb_devices = []
+  cmd = [ 'adb', 'devices' ]
+  Open3.popen3(*cmd) { |sin, sout, serr, thr|
+    pid = thr[:pid]
+    outlines = sout.readlines
+    errlines = serr.readlines
+
+    if errlines.length > 0
+      $stderr.puts "ERROR:"
+
+      errlines.each { |ln|
+        $stderr.puts ln
+      }
+    end
+
+    outlines.each { |ln|
+      ln.chomp!
+      next if ln.length < 1
+      next if ln == "List of devices attached "
+
+      parts = ln.split("\t")
+      serial = parts.first
+      adb_devices << serial
+    }
+  }
+
+  $stderr.puts "[*] Found #{adb_devices.length} devices via 'adb devices'"
+
+  return adb_devices
+end
 

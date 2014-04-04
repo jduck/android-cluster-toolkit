@@ -30,7 +30,7 @@ The toolkit contains three scripts that are included by the other scripts. These
 
 #### devices-orig.rb
 
-This file contains a Ruby Hash that describes various properties of the devices within your Android cluster. A sample file is included as "devices-orig.rb.sample". This file is never changed by the toolkit, so this is a great place to put manual comments and so forth.
+This file contains a Ruby Hash that describes various properties of the devices within your Android cluster. A sample file is included as "devices-orig.rb.sample". This file is never changed by the toolkit, so this is a great place to put manual comments and so forth. You can generate one from the sample by running './init.rb' or 'make'.
 
 #### devices.rb
 
