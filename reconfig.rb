@@ -41,7 +41,7 @@ adb_devices.each { |ser|
 }
 
 
-$stderr.puts "[*] Found #{new.length} device#{plural(new.length)}!"
+$stderr.puts "[*] Matched #{new.length} device#{plural(new.length)}!"
 
 $stderr.puts "[*] Missing #{missing.length} device#{plural(missing.length)}:"
 missing.each { |dev|
