@@ -12,15 +12,13 @@ $devices = [
   # The fields:
   #   :name    -- a human friendly name, chosen by you
   #   :serial  -- the device's serial number (from 'adb devices')
-  #   :usb     -- the vendor and product id of the device (not used currently)
   #
   # Use the ./scan.rb script to generate a basis for new entries.
   # Use ./reconfig.rb to turn this file into devices.rb
   #
   {
-    :name => 'g1-1', # htc g1
+    :name => 'g1', # htc g1
     :serial => 'HT333GZ31337',
-    :usb => '0bb4:0c02',
   },
 =end
 ]

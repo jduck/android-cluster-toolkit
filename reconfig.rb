@@ -57,11 +57,8 @@ File.open(devices, "wb") { |f|
   new.each { |dev|
     name = "'#{dev[:name]}',"
     serial = "'#{dev[:serial]}',"
-    usb = "'#{dev[:usb]}',"
-    codename = ""
-    codename = ":codename => '#{dev[:codename]}'," if dev[:codename]
 
-    f.puts "  { :name => %-16s :serial => %-24s :usb => %-10s %s }," % [name, serial, usb, codename]
+    f.puts "  { :name => %-16s :serial => %-24s }," % [name, serial]
   }
   f.puts "]"
 }
