@@ -14,15 +14,16 @@ while File.symlink?(bfn)
 end
 $:.unshift(File.dirname(bfn))
 
+require 'madb'
+
 
 # load current devices
 require 'devices'
-$stderr.puts "[*] Loaded #{$devices.length} devices from our database"
+$stderr.puts "[*] Loaded #{$devices.length} device#{plural($devices.length)} from 'devices.rb'"
 
 # get a list of devices via 'adb devices'
-require 'madb'
 adb_devices = adb_scan()
-
+$stderr.puts "[*] Found #{adb_devices.length} device#{plural(adb_devices.length)} via 'adb devices'"
 
 # intersect this with $devices
 new = []
@@ -41,12 +42,13 @@ adb_devices.each { |ser|
 $stderr.puts "[*] Found #{new.length} new device#{plural(new.length)}!"
 
 
-# print any new ones in the format used to add to devices.rb
+# print any new ones in the format used to add to devices-orig.rb
 new.each { |ser|
-    puts "  {"
-    puts "    :name => 'name', # description"
-    puts "    :serial => '#{ser}',"
-    puts "    :usb => 'MFGR:CODE', # adb"
-    puts "  },"
+    f.puts %Q|
+  {
+    :name => 'name', # description
+    :serial => '#{ser}',
+  },
+|
 }
 

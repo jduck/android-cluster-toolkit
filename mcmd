@@ -15,31 +15,16 @@ end
 $:.unshift(File.dirname(bfn))
 
 require 'devices'
+require 'madb'
 
 
-devid = nil
-if ARGV.length < 1
-  $stderr.puts "usage: mcmd <device names or serials separated by commas> <parameters to adb client>"
+# process args
+if ARGV.length < 3 or not parse_global_options()
+  $stderr.puts "usage: mcmd [-1v] -d <device names or serials separated by commas> <parameters to busybox>"
   exit(1)
 end
 
-selected_devices = ARGV.shift.split(',')
 
-do_all = (selected_devices.first == ".")
-
-$devices.each { |dev|
-
-  next if not do_all and not (selected_devices.include? dev[:name] or selected_devices.include? dev[:serial])
-
-  if dev[:disabled]
-    puts "[!] Warning: The selected device is marked disabled. It may not be present."
-  end
-
-  puts "[*] #{dev[:name]} (ANDROID_SERIAL=\"#{dev[:serial]}\") ..."
-
-  cmd = [ 'adb', '-s', dev[:serial], 'shell', ]
-  cmd += ARGV
-  system(*cmd)
-  puts ""
-}
+# run the commands
+multi_adb(['shell'])
 

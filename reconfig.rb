@@ -14,14 +14,17 @@ while File.symlink?(bfn)
 end
 $:.unshift(File.dirname(bfn))
 
+require 'madb'
+
 
 # load persistent devices
+$devices = []
 require 'devices-orig'
-$stderr.puts "[*] Loaded #{$devices.length} devices from our database"
+$stderr.puts "[*] Loaded #{$devices.length} device#{plural($devices.length)} from 'devices-orig.rb'"
 
 # get a list of devices via 'adb devices'
-require 'madb'
 adb_devices = adb_scan()
+$stderr.puts "[*] Found #{adb_devices.length} device#{plural(adb_devices.length)} via 'adb devices'"
 
 
 # print missing devices and store found ones

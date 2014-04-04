@@ -15,30 +15,56 @@ end
 $:.unshift(File.dirname(bfn))
 
 require 'devices'
+require 'madb'
 
 
-if ARGV.length < 1
-  $stderr.puts "usage: mdo <device names or serials separated by commas> <parameters to adb client>"
+# process args
+if ARGV.length < 3 or not parse_global_options()
+  $stderr.puts "usage: mdo [-1v] -d <device names or serials separated by commas> <parameters to adb client>"
   exit(1)
 end
 
-selected_devices = ARGV.shift.split(',')
 
-do_all = (selected_devices.first == ".")
+# validate the adb command line
+cmd = ARGV.first
+if cmd == 'wait-for-device'
+  ARGV.shift
+  cmd = ARGV.first
+end
+case cmd
+  when 'bugreport', 'get-state', 'get-serialno', 'get-devpath', 'reboot', 'reboot-bootloader', 'root', 'remount'
+    # allow for all usage patterns
 
-$devices.each { |dev|
+  when 'shell'
+    if ARGV.length < 2 and ($do_all or $selected_devices.length > 1)
+      $stderr.puts "[!] the #{cmd} command requires an argument when used with multiple devices"
+      exit(1)
+    end
 
-  next if not do_all and not (selected_devices.include? dev[:name] or selected_devices.include? dev[:serial])
+  when 'push', 'install'
+    if ARGV.length < 2
+      $stderr.puts "[!] the #{cmd} command requires an argument"
+      exit(1)
+    end
 
-  if dev[:disabled]
-    puts "[!] Warning: The selected device is marked disabled. It may not be present."
-  end
+  when 'pull'
+    if $do_all or $selected_devices.length > 1
+      $stderr.puts "[!] use ./mpull to pull from multiple devices"
+      exit(1)
+    end
 
-  puts "[*] #{dev[:name]} (ANDROID_SERIAL=\"#{dev[:serial]}\") ..."
+  when 'logcat'
+    if $do_all or $selected_devices.length > 1
+      $stderr.puts "[!] specify a single device for logcat"
+      exit(1)
+    end
 
-  cmd = [ 'adb', '-s', dev[:serial], ]
-  cmd += ARGV
-  system(*cmd)
-  puts ""
-}
+  else
+    $stderr.puts "[!] unsupported command: #{cmd}"
+    exit(1)
+end
+
+
+# run the commands
+multi_adb()
 

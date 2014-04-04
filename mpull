@@ -15,28 +15,30 @@ end
 $:.unshift(File.dirname(bfn))
 
 require 'devices'
+require 'madb'
 
 
-if ARGV.length < 1
-  $stderr.puts "usage: mpull <device names or serials separated by commas> <path to pull>"
+# process args
+if ARGV.length < 2 or not parse_global_options()
+  $stderr.puts "usage: mpull [-1v] -d <device names or serials separated by commas> <path to pull>"
   exit(1)
 end
 
-selected_devices = ARGV.shift.split(',')
-
 path = ARGV.shift
 
-do_all = (selected_devices.first == ".")
 
+#
+# NOTE: this can't use multi_adb because it has a device-dependant argument
+#
 $devices.each { |dev|
 
-  next if not do_all and not (selected_devices.include? dev[:name] or selected_devices.include? dev[:serial])
+  next if not is_selected(dev)
 
   if dev[:disabled]
     puts "[!] Warning: The selected device is marked disabled. It may not be present."
   end
 
-  puts "[*] #{dev[:name]} (ANDROID_SERIAL=\"#{dev[:serial]}\") ..."
+  print_col_prefix(dev)
   
   cmd = [ 'adb', '-s', dev[:serial], 'pull' ]
   cmd << path
@@ -44,6 +46,5 @@ $devices.each { |dev|
   #puts cmd
   system(*cmd)
 
-  puts ""
+  puts "" if not $one_line
 }
-
