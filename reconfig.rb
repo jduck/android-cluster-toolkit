@@ -12,7 +12,7 @@ bfn = __FILE__
 while File.symlink?(bfn)
   bfn = File.expand_path(File.readlink(bfn), File.dirname(bfn))
 end
-$:.unshift(File.dirname(bfn))
+$:.unshift(File.join(File.dirname(bfn), 'lib'))
 
 require 'madb'
 
@@ -50,7 +50,7 @@ missing.each { |dev|
 
 
 # produce a new devices.rb with the currently connected devices only
-devices = File.join(File.dirname(bfn), 'devices.rb')
+devices = File.join(File.dirname(bfn), 'lib', 'devices.rb')
 
 File.open(devices, "wb") { |f|
   f.puts "$devices = ["

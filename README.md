@@ -28,15 +28,15 @@ Several scripts comprise the Android Cluster Toolkit. These scripts are describe
 
 The toolkit contains three scripts that are included by the other scripts. These scripts each serve a particular purpose.
 
-#### devices-orig.rb
+#### lib/devices-orig.rb
 
-This file contains a Ruby Hash that describes various properties of the devices within your Android cluster. A sample file is included as "devices-orig.rb.sample". This file is never changed by the toolkit, so this is a great place to put manual comments and so forth. You can generate one from the sample by running './init.rb' or 'make'.
+This file contains a Ruby Hash that describes various properties of the devices within your Android cluster. A sample file is included as "lib/devices-orig.rb.sample". This file is never changed by the toolkit, so this is a great place to put manual comments and so forth. You can generate one from the sample by running './init.rb' or 'make'.
 
-#### devices.rb
+#### lib/devices.rb
 
-The devices.rb script is generated from the Hash in devices-orig.rb. It contains the list of devices that are currently connected to the host machine (the ADB Server). It's created by the reconfig.rb script.
+The lib/devices.rb script is generated from the Hash in lib/devices-orig.rb. It contains the list of devices that are currently connected to the host machine (the ADB Server). It's created by the reconfig.rb script.
 
-#### madb.rb
+#### lib/madb.rb
 
 This file contains functionality that is shared between several of the scripts in the Android Cluster Toolkit. It is included by those scripts and currently only contains a few utility method implementations.
 
@@ -46,11 +46,11 @@ Dealing with a large collection of Android devices isn't painless. A couple of s
 
 #### scan.rb
 
-The scan.rb script exists to make adding new devices easier. Once you obtain a new device, plug it in and run the scan.rb script. If it finds any devices that are not in devices-orig.rb it will output suitable Hash entries for them. Add these entries to devices-orig.rb to make these devices accessible to the multi-device scripts. Make sure to set a unique name for the device (perhaps the model number or slang name, ie. GT-I9505 or sgs4). Re-run reconfig.rb to activate the changes.
+The scan.rb script exists to make adding new devices easier. Once you obtain a new device, plug it in and run the scan.rb script. If it finds any devices that are not in lib/devices-orig.rb it will output suitable Hash entries for them. Add these entries to lib/devices-orig.rb to make these devices accessible to the multi-device scripts. Make sure to set a unique name for the device (perhaps the model number or slang name, ie. GT-I9505 or sgs4). Re-run reconfig.rb to activate the changes.
 
 #### reconfig.rb
 
-The reconfig.rb script automatically generates the Hash in devices.rb. When executed, it copies the entries in devices-orig.rb that are currently connected to the ADB Server. This way, you can avoid silly "no such device" output from the multi-device scripts.
+The reconfig.rb script automatically generates the Hash in lib/devices.rb. When executed, it copies the entries in lib/devices-orig.rb that are currently connected to the ADB Server. This way, you can avoid silly "no such device" output from the multi-device scripts.
 
 ### Single Device Scripts
 
@@ -114,28 +114,28 @@ At this point you can follow either the *QUICK* or *MANUAL* methods to provision
 
 ### QUICK
 
-1. Run the ./init.rb to generate devices-orig.rb from the connected devices
-2. Run ./reconfig.rb to generate devices.rb from devices-orig.rb
+1. Run the ./init.rb to generate lib/devices-orig.rb from the connected devices
+2. Run ./reconfig.rb to generate lib/devices.rb from lib/devices-orig.rb
 
 The relevant commands are:
 
 ```
 $ ./init.rb
-$ $EDITOR devices-orig.rb  # optionally set names for the devices
+$ $EDITOR lib/devices-orig.rb  # optionally set names for the devices
 $ ./reconfig.rb
 ```
 
 ### MANUAL
 
 1. Run the ./scan.rb script to see newly connected devices
-2. Add the Hash entries to devices-orig.rb, assigning names as you go
+2. Add the Hash entries to lib/devices-orig.rb, assigning names as you go
 3. Run ./reconfig.rb
 
 The relevant commands are:
 
 ```
 $ ./scan.rb
-$ $EDITOR devices-orig.rb  # add and set names for the devices
+$ $EDITOR lib/devices-orig.rb  # add and set names for the devices
 $ ./reconfig.rb
 ```
 

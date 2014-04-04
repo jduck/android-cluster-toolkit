@@ -12,7 +12,7 @@ bfn = __FILE__
 while File.symlink?(bfn)
   bfn = File.expand_path(File.readlink(bfn), File.dirname(bfn))
 end
-$:.unshift(File.dirname(bfn))
+$:.unshift(File.join(File.dirname(bfn), 'lib'))
 
 require 'madb'
 
