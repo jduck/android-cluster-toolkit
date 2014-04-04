@@ -44,7 +44,6 @@ File.open(orig_devices, 'wb') { |f|
     :serial => '#{dev}',
   },
 |
-    #f.puts "{ :name => 'set me', :serial => '#{dev}' },"
   }
   f.puts "]"
 }
