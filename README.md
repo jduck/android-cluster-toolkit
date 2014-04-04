@@ -56,7 +56,7 @@ The reconfig.rb script automatically generates the Hash in lib/devices.rb. When 
 
 Although there used to be more single device scripts, they were deprecated in favor of a more unified interface (described in the next section). That said, one single-device script remains: shell.rb.
 
-#### shell.rb <device|serial>
+#### shell.rb &lt;device|serial>
 
 This script executes a shell suitable for operating on the specified device only. This is useful for maintenance or doing more focused research on a single device. When executed, it simply sets up the environment so that other ADB-aware tools will operate on the specified device. Once the environment is set up, the script spawns a shell for your pleasure. Exit the new shell to return to the original shell.
 
@@ -71,11 +71,11 @@ The arguments that follow the device selector are specific to each script. In so
 
 A couple of options, -v and -1, toggle verbosity and single-line mode. NOTE: Single-line mode does not accept input and will block if the device reads from stdin.
 
-#### mdo [-1v] -d <device selector> <adb args>
+#### mdo [-1v] -d &lt;device selector> &lt;adb args>
 
 This multi-device script enables you to run an arbitrary ADB command against the selected device(s). Any command supported by the ADB client should work (ie, push, shell, reboot, etc). Validation is done to prevent non-desirable results; relax it at your own risk.
 
-#### mcmd [-1v] -d <device selector> <command and args>
+#### mcmd [-1v] -d &lt;device selector> &lt;command and args>
 
 This multi-device script enables you to run an arbitrary shell command on the selected device(s). For example:
 
@@ -83,11 +83,11 @@ This multi-device script enables you to run an arbitrary shell command on the se
 
 This will list the build fingerprint of all connected devices.
 
-#### mbb [-1v] -d <device selector> <command and args>
+#### mbb [-1v] -d &lt;device selector> &lt;command and args>
 
 During research, the need arose to use tools from the BusyBox binary in lieu of the default versions. For example, the ls(1) binary inside BusyBox offers color output, among other features whereas the default one (usually from toolbox) does not. This script accomplishes this goal by prefixing the specified command with "/data/local/tmp/busybox". Placing a suitable busybox binary in this location is up to you. You can find a suitable binary at: http://cache.saurik.com/android/armeabi/busybox
 
-#### mpull [-1v] -d <device selector> <path to pull>
+#### mpull [-1v] -d &lt;device selector> &lt;path to pull>
 
 Another common task is pulling a particular file or path from all devices so that the data can be inspected on the host machine. This script will pull the specified paths from all devices and store them into a device-specific sub-directory within the "devices" directory in the Android Cluster Toolkit directory. For example:
 
@@ -141,4 +141,4 @@ $ ./reconfig.rb
 
 At this point you're ready to go. To confirm everything is working, run something against all the devices.
 
-<code>./mcmd . getprop ro.build.fingerprint</code>
+<code>./mcmd -1d . getprop ro.build.fingerprint</code>
