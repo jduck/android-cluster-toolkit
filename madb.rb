@@ -53,8 +53,10 @@ def print_col_prefix(include_serial, widths, dev)
 end
  
 
-def adb_scan()
+#
 # get a list of devices via 'adb devices'
+#
+def adb_scan()
   adb_devices = []
   cmd = [ 'adb', 'devices' ]
   Open3.popen3(*cmd) { |sin, sout, serr, thr|
