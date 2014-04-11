@@ -75,6 +75,10 @@ A couple of options, -v and -1, toggle verbosity and single-line mode. NOTE: Sin
 
 This multi-device script enables you to run an arbitrary ADB command against the selected device(s). Any command supported by the ADB client should work (ie, push, shell, reboot, etc). Validation is done to prevent non-desirable results; relax it at your own risk.
 
+<code>./mdo -1d . install /path/to/my/app.apk</code>
+
+This will install app.apk to all connected devices.
+
 #### mcmd [-1v] -d &lt;device selector> &lt;command and args>
 
 This multi-device script enables you to run an arbitrary shell command on the selected device(s). For example:
