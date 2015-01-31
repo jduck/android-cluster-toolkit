@@ -32,7 +32,7 @@ if cmd == 'wait-for-device'
   cmd = ARGV.first
 end
 case cmd
-  when 'bugreport', 'get-state', 'get-serialno', 'get-devpath', 'reboot', 'reboot-bootloader', 'root', 'remount'
+  when 'bugreport', 'get-state', 'get-serialno', 'get-devpath', 'reboot', 'reboot-bootloader', 'root', 'remount', 'jdwp'
     # allow for all usage patterns
 
   when 'shell'
