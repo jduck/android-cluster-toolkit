@@ -44,7 +44,7 @@ $stderr.puts "[*] Found #{new.length} new device#{plural(new.length)}!"
 
 # print any new ones in the format used to add to devices-orig.rb
 new.each { |ser|
-    f.puts %Q|
+  puts %Q|
   {
     :name => 'name', # description
     :serial => '#{ser}',
