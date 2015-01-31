@@ -36,7 +36,14 @@ def parse_global_options()
         return false if arg == "--"
 
         $selected_devices = arg.split(',')
-        $do_all = ($selected_devices.first == ".")
+        $do_all = false
+        if $selected_devices.length == 0
+          $do_all = true
+        elsif $selected_devices.first == "."
+          $do_all = true
+          discard = $selected_devices.shift
+        end
+
         opts.terminate()
       else
         return false
@@ -190,10 +197,17 @@ end
 #
 def multi_adb(base = nil, argv = nil)
 
+  not_found = []
+  not_found = $selected_devices.dup if $selected_devices
+
   $devices.each { |dev|
 
     # skip this device if it wasn't selected
     next if not is_selected(dev)
+
+    # it was selected, remove it from the "not_found" list
+    not_found.delete dev[:name]
+    not_found.delete dev[:serial]
 
     argv ||= ARGV
 
@@ -219,6 +233,10 @@ def multi_adb(base = nil, argv = nil)
       system(*cmd)
       puts ""
     end
+  }
+
+  not_found.each { |sel|
+    puts "[!] didn't find device \"#{sel}\" - typo? device not connected?"
   }
 
 end
