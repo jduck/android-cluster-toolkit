@@ -16,6 +16,7 @@ $:.unshift(File.join(File.dirname(bfn), 'lib'))
 
 require 'madb'
 
+$verbose = true if ARGV.pop == "-v"
 
 # load persistent devices
 $devices = []
@@ -43,10 +44,14 @@ adb_devices.each { |ser|
 
 $stderr.puts "[*] Matched #{new.length} device#{plural(new.length)}!"
 
-$stderr.puts "[*] Missing #{missing.length} device#{plural(missing.length)}:"
-missing.each { |dev|
-  $stderr.puts "    #{dev[:name]} (#{dev[:serial]})"
-}
+if $verbose
+  $stderr.puts "[*] Missing #{missing.length} device#{plural(missing.length)}:"
+  missing.each { |dev|
+    $stderr.puts "    #{dev[:name]} (#{dev[:serial]})"
+  }
+else
+  $stderr.puts "[*] Missing #{missing.length} device#{plural(missing.length)}"
+end
 
 
 # produce a new devices.rb with the currently connected devices only
