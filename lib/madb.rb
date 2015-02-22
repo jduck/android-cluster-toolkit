@@ -188,12 +188,14 @@ end
 # run the adb binary once for each selected device
 # each time, specifying the remaining ARGV
 #
-def multi_adb(base = nil)
+def multi_adb(base = nil, argv = nil)
 
   $devices.each { |dev|
 
     # skip this device if it wasn't selected
     next if not is_selected(dev)
+
+    argv ||= ARGV
 
     if dev[:disabled]
       puts "[!] Warning: The selected device is marked disabled. It may not be present."
@@ -204,7 +206,7 @@ def multi_adb(base = nil)
 
       args = [ '-s', dev[:serial] ]
       args += base if base
-      args += ARGV
+      args += argv
       puts adb_get_lines(args).join("\\n")
 
     else
@@ -213,7 +215,7 @@ def multi_adb(base = nil)
 
       cmd = [ 'adb', '-s', dev[:serial] ]
       cmd += base if base
-      cmd += ARGV
+      cmd += argv
       system(*cmd)
       puts ""
     end
