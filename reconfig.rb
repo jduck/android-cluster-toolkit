@@ -18,39 +18,80 @@ require 'madb'
 
 $verbose = true if ARGV.pop == "-v"
 
+# load existing set of devices
+require 'devices'
+$old_devices = $devices.dup
+
+
 # load persistent devices
 $devices = []
 require 'devices-orig'
 $stderr.puts "[*] Loaded #{$devices.length} device#{plural($devices.length)} from 'devices-orig.rb'"
+
 
 # get a list of devices via 'adb devices'
 adb_devices = adb_scan()
 $stderr.puts "[*] Found #{adb_devices.length} device#{plural(adb_devices.length)} via 'adb devices'"
 
 
-# print missing devices and store found ones
-missing = $devices.dup
-new = []
-adb_devices.each { |ser|
-  $devices.each { |dev|
-    if dev[:serial] == ser
-      new << dev
-      missing.delete dev
-      break
+def find_device(pool, serial)
+  pool.each { |dev|
+    if dev[:serial] == serial
+      return dev
     end
   }
+  nil
+end
+
+
+# determine new set and missing devices
+if $verbose
+  missing = $devices.dup  # devices that aren't connected now.
+end
+new_devices = []          # new available devices
+nconn = []                # newly connected
+dconn = $old_devices.dup  # recently disconnected
+adb_devices.each { |ser|
+  # find this device in the pool of all supported devices
+  dev = find_device($devices, ser)
+  if dev
+    # got it.
+    new_devices << dev
+
+    # it's not missing.
+    missing.delete dev if $verbose
+  end
+
+  # see if this one was present before...
+  pdev = find_device($old_devices, ser)
+
+  # if so, it didn't disconnect :)
+  if pdev
+    dconn.delete pdev
+  else
+    nconn << dev
+  end
 }
 
 
-$stderr.puts "[*] Matched #{new.length} device#{plural(new.length)}!"
+# show status. which matched, what's new, what disappeared...
+$stderr.puts "[*] Matched #{new_devices.length} device#{plural(new_devices.length)}!"
+$stderr.puts "  #{nconn.length} device#{plural(nconn.length)} added"
+nconn.each { |dev|
+  $stderr.puts "    #{dev[:name]} (#{dev[:serial]})"
+}
+$stderr.puts "  #{dconn.length} device#{plural(dconn.length)} removed"
+dconn.each { |dev|
+  $stderr.puts "    #{dev[:name]} (#{dev[:serial]})"
+}
 
+
+# show messing devices (verbose only)
 if $verbose
   $stderr.puts "[*] Missing #{missing.length} device#{plural(missing.length)}:"
   missing.each { |dev|
     $stderr.puts "    #{dev[:name]} (#{dev[:serial]})"
   }
-else
-  $stderr.puts "[*] Missing #{missing.length} device#{plural(missing.length)}"
 end
 
 
@@ -59,7 +100,7 @@ devices = File.join(File.dirname(bfn), 'lib', 'devices.rb')
 
 File.open(devices, "wb") { |f|
   f.puts "$devices = ["
-  new.each { |dev|
+  new_devices.each { |dev|
     name = "'#{dev[:name]}',"
     serial = "'#{dev[:serial]}',"
 
