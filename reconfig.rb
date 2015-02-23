@@ -68,7 +68,8 @@ adb_devices.each { |ser|
   # if so, it didn't disconnect :)
   if pdev
     dconn.delete pdev
-  else
+  elsif dev
+    # if we have a device, it's new.
     nconn << dev
   end
 }
