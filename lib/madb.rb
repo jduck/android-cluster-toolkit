@@ -59,17 +59,33 @@ end
 
 
 #
+# return the selection (regex) that matches the provided device
+#
+def which_matches(sel, dev)
+  # regex match :)
+  sel.each { |str|
+    return str if dev[:name] =~ /^#{str}$/
+  }
+  return nil
+end
+
+#
 # return if the specified device is selected
 #
 def is_selected(dev)
   return true if $do_all
 
   sel = $selected_devices
-  return false if not sel
+  return false if not sel or sel.length == 0
 
-  if sel.length > 0 and (sel.include? dev[:name] or sel.include? dev[:serial])
+  if (sel.include? dev[:name] or sel.include? dev[:serial])
     return true
   end
+
+  # regex match :)
+  str = which_matches(sel, dev)
+  return true if not str.nil?
+
   return false
 end
 
@@ -206,8 +222,13 @@ def multi_adb(base = nil, argv = nil)
     next if not is_selected(dev)
 
     # it was selected, remove it from the "not_found" list
-    not_found.delete dev[:name]
-    not_found.delete dev[:serial]
+    sel = which_matches(not_found, dev)
+    if not sel.nil?
+      not_found.delete sel
+    else
+      not_found.delete dev[:name]
+      not_found.delete dev[:serial]
+    end
 
     argv ||= ARGV
 
