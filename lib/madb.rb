@@ -111,7 +111,7 @@ def get_col_widths()
   }
 
   if $verbose
-    return [ w_name, w_serial ]
+    return [ w_name, w_serial + 1 ]
   end
   return w_name
 end
