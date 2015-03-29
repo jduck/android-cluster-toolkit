@@ -5,7 +5,7 @@
 #
 # shell.rb - spawn a shell for the specified device
 #
-# (c) 2012-2014 Joshua J. Drake (jduck)
+# (c) 2012-2015 Joshua J. Drake (jduck)
 #
 
 bfn = __FILE__

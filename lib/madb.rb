@@ -3,7 +3,7 @@
 #
 # shared implementation of multi-adb scripts
 #
-# (c) 2012-2014 Joshua J. Drake (jduck)
+# (c) 2012-2015 Joshua J. Drake (jduck)
 #
 
 require 'open3'

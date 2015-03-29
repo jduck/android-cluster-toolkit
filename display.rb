@@ -5,7 +5,7 @@
 #
 # list.rb - list which android devices are plugged in ($devices and adb_devices)
 #
-# (c) 2012-2014 Joshua J. Drake (jduck)
+# (c) 2012-2015 Joshua J. Drake (jduck)
 #
 
 bfn = __FILE__

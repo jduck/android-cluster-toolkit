@@ -5,7 +5,7 @@
 # 
 # init.rb - generate devices-orig.rb based on 'adb devices'
 #
-# (c) 2012-2014 Joshua J. Drake (jduck)
+# (c) 2012-2015 Joshua J. Drake (jduck)
 #
 
 bfn = __FILE__
