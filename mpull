@@ -14,7 +14,10 @@ while File.symlink?(bfn)
 end
 $:.unshift(File.join(File.dirname(bfn), 'lib'))
 
+
 require 'devices'
+load_connected()
+
 require 'madb'
 
 
@@ -30,7 +33,7 @@ path = ARGV.shift
 #
 # NOTE: this can't use multi_adb because it has a device-dependant argument
 #
-$devices.each { |dev|
+$devices[:connected].each { |dev|
 
   next if not is_selected(dev)
 
