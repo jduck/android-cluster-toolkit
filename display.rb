@@ -3,7 +3,8 @@
 #
 # Android Cluster Toolkit
 #
-# list.rb - list which android devices are plugged in ($devices and adb_devices)
+# display.rb - list which android devices are plugged in
+# (in both $devices[:connected] and adb_devices)
 #
 # (c) 2012-2015 Joshua J. Drake (jduck)
 #
@@ -29,7 +30,7 @@ $verbose = true
 $devices.each { |dev|
   adb_devices.each { |ser|
     if dev[:serial] == ser
-      puts "[*] #{dev[:name]} / #{dev[:serial]}"
+      puts "    #{dev[:name]} / #{dev[:serial]}"
       break
     end
   }
