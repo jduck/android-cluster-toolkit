@@ -36,6 +36,10 @@ This file contains a Ruby Hash that describes various properties of the devices 
 
 The lib/devices.rb script is generated from the Hash in lib/devices-orig.rb. It contains the list of devices that are currently connected to the host machine (the ADB Server). It's created by the reconfig.rb script.
 
+#### lib/plural.rb
+
+This file only contains a simple helper function to help pluralize words talking about arrays.
+
 #### lib/madb.rb
 
 This file contains functionality that is shared between several of the scripts in the Android Cluster Toolkit. It is included by those scripts and currently only contains a few utility method implementations.

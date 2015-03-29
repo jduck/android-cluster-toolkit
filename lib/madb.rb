@@ -9,11 +9,7 @@
 require 'open3'
 require 'getoptlong'
 
-
-def plural(num)
-  return "" if num == 1
-  return "s"
-end
+require 'plural'
 
 
 #
