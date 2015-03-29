@@ -113,4 +113,3 @@ File.open(devices, "wb") { |f|
   }
   f.puts "]"
 }
-
