@@ -139,7 +139,7 @@ end
 #
 # get a list of devices via 'adb devices'
 #
-def adb_scan()
+def adb_scan(verbose = false)
   adb_devices = []
   cmd = [ 'adb', 'devices' ]
   Open3.popen3(*cmd) { |sin, sout, serr, thr|
@@ -165,6 +165,10 @@ def adb_scan()
       adb_devices << serial
     }
   }
+
+  if verbose
+    $stderr.puts "[*] Found #{adb_devices.length} device#{plural(adb_devices.length)} via 'adb devices'"
+  end
 
   return adb_devices
 end

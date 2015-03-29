@@ -30,8 +30,7 @@ $stderr.puts "[*] Loaded #{$devices.length} device#{plural($devices.length)} fro
 
 
 # get a list of devices via 'adb devices'
-adb_devices = adb_scan()
-$stderr.puts "[*] Found #{adb_devices.length} device#{plural(adb_devices.length)} via 'adb devices'"
+adb_devices = adb_scan(true)
 
 
 def find_device(pool, serial)

@@ -14,16 +14,15 @@ while File.symlink?(bfn)
 end
 $:.unshift(File.join(File.dirname(bfn), 'lib'))
 
-require 'madb'
-
 
 # load current devices
 require 'devices'
 $stderr.puts "[*] Loaded #{$devices.length} device#{plural($devices.length)} from 'devices.rb'"
 
 # get a list of devices via 'adb devices'
-adb_devices = adb_scan()
-$stderr.puts "[*] Found #{adb_devices.length} device#{plural(adb_devices.length)} via 'adb devices'"
+require 'madb'
+adb_devices = adb_scan(true)
+
 
 # show devices in both sets
 $verbose = true
@@ -35,4 +34,3 @@ $devices.each { |dev|
     end
   }
 }
-

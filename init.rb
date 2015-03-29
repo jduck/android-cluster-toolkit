@@ -17,8 +17,7 @@ $:.unshift(File.join(File.dirname(bfn), 'lib'))
 
 # get a list of devices via 'adb devices'
 require 'madb'
-new = adb_scan()
-$stderr.puts "[*] Found #{new.length} device#{plural(new.length)} via 'adb devices'"
+new = adb_scan(true)
 
 
 orig_devices = File.join(File.dirname(bfn), 'lib', 'devices-orig.rb')
@@ -45,5 +44,3 @@ File.open(orig_devices, 'wb') { |f|
   }
   f.puts "]"
 }
-
-
