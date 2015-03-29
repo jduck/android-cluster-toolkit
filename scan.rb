@@ -15,9 +15,9 @@ end
 $:.unshift(File.join(File.dirname(bfn), 'lib'))
 
 
-# load current devices
 require 'devices'
-$stderr.puts "[*] Loaded #{$devices.length} device#{plural($devices.length)} from 'devices.rb'"
+load_connected(true)
+
 
 # get a list of devices via 'adb devices'
 require 'madb'
@@ -28,7 +28,7 @@ adb_devices = adb_scan(true)
 new = []
 adb_devices.each { |ser|
   found = false
-  $devices.each { |dev|
+  $devices[:connected].each { |dev|
     if dev[:serial] == ser
       found = true
       break

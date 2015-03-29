@@ -1,3 +1,2 @@
-devices.rb
-devices-orig.rb
-
+lib/devices/pool.rb
+lib/devices/connected.rb

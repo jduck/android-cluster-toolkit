@@ -14,41 +14,17 @@ while File.symlink?(bfn)
 end
 $:.unshift(File.join(File.dirname(bfn), 'lib'))
 
+
 require 'devices'
 
 
-devid = nil
-if ARGV.length > 0
-  devid = ARGV.shift
-end
-
-if devid.nil?
-  $stderr.puts "usage: shell <device name or serial>"
-  exit(1)
-end
+devid = parse_device_arg("shell")
+load_connected()
+dev = get_one_device(devid)
 
 
-usedev = nil
-$devices.each { |dev|
-  if dev[:name] == devid or dev[:serial] == devid
-    usedev = dev
-    break
-  end
-}
-
-if usedev.nil?
-  $stderr.puts "[!] unable to find device: #{devid}"
-  exit(1)
-end
-
-if usedev[:disabled]
-  puts "[!] Warning: The selected device is marked disabled. It may not be present."
-end
-
-
-puts "[*] starting shell for #{usedev[:name]} (ANDROID_SERIAL=\"#{usedev[:serial]}\") ..."
-ENV["ANDROID_SERIAL"] = usedev[:serial]
-ENV["debian_chroot"] = usedev[:name]
+puts "[*] starting shell for #{dev[:name]} (ANDROID_SERIAL=\"#{dev[:serial]}\") ..."
+ENV["ANDROID_SERIAL"] = dev[:serial]
+ENV["debian_chroot"] = dev[:name]
 
 system(ENV['SHELL']) #, '--norc')
-

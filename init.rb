@@ -3,7 +3,7 @@
 #
 # Android Cluster Toolkit
 # 
-# init.rb - generate devices-orig.rb based on 'adb devices'
+# init.rb - generate devices/pool.rb based on 'adb devices'
 #
 # (c) 2012-2015 Joshua J. Drake (jduck)
 #
@@ -20,19 +20,19 @@ require 'madb'
 new = adb_scan(true)
 
 
-orig_devices = File.join(File.dirname(bfn), 'lib', 'devices-orig.rb')
-
-if File.exists? orig_devices
-  $stderr.puts "[!] devices-orig.rb exists! rm it to start over"
+device_pool = File.join(File.dirname(bfn), 'lib', 'devices', 'pool.rb')
+if File.exists? device_pool
+  $stderr.puts "[!] devices/pool.rb exists! rm it to start over"
   exit(1)
 end
 
+
 template = nil
-File.open("#{orig_devices}.sample", 'rb') { |f|
+File.open("#{device_pool}.sample", 'rb') { |f|
   template = f.read
 }
 
-File.open(orig_devices, 'wb') { |f|
+File.open(device_pool, 'wb') { |f|
   f.puts template.split(/^=end$/).first + "=end"
   new.each { |dev|
     f.puts %Q|

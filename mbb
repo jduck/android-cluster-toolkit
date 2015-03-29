@@ -14,7 +14,10 @@ while File.symlink?(bfn)
 end
 $:.unshift(File.join(File.dirname(bfn), 'lib'))
 
+
 require 'devices'
+load_connected(false)
+
 require 'madb'
 
 
@@ -27,4 +30,3 @@ end
 
 # run the commands
 multi_adb(['shell', '/data/local/tmp/busybox'])
-

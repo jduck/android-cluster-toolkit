@@ -93,7 +93,7 @@ def get_col_widths()
   w_name = 0
   w_serial = 0
 
-  $devices.each { |dev|
+  $devices[:connected].each { |dev|
     next if dev[:disabled]
     next if not is_selected(dev)
 
@@ -216,7 +216,7 @@ def multi_adb(base = nil, argv = nil)
   not_found = []
   not_found = $selected_devices.dup if $selected_devices
 
-  $devices.each { |dev|
+  $devices[:connected].each { |dev|
 
     # skip this device if it wasn't selected
     next if not is_selected(dev)

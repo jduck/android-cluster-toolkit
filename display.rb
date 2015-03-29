@@ -16,9 +16,9 @@ end
 $:.unshift(File.join(File.dirname(bfn), 'lib'))
 
 
-# load current devices
+# load connected devices
 require 'devices'
-$stderr.puts "[*] Loaded #{$devices.length} device#{plural($devices.length)} from 'devices.rb'"
+load_connected(true)
 
 # get a list of devices via 'adb devices'
 require 'madb'
@@ -26,8 +26,7 @@ adb_devices = adb_scan(true)
 
 
 # show devices in both sets
-$verbose = true
-$devices.each { |dev|
+$devices[:connected].each { |dev|
   adb_devices.each { |ser|
     if dev[:serial] == ser
       puts "    #{dev[:name]} / #{dev[:serial]}"

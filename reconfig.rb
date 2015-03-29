@@ -18,16 +18,13 @@ require 'madb'
 
 $verbose = true if ARGV.pop == "-v"
 
-# load existing set of devices
+# load connected set of devices
 require 'devices'
-$old_devices = $devices.dup
+load_connected(true)
+$old_devices = $devices[:connected].dup
 
-
-# load persistent devices
-$devices = []
-require 'devices-orig'
-$stderr.puts "[*] Loaded #{$devices.length} device#{plural($devices.length)} from 'devices-orig.rb'"
-
+# load total device pool
+load_pool(true)
 
 # get a list of devices via 'adb devices'
 adb_devices = adb_scan(true)
@@ -45,14 +42,16 @@ end
 
 # determine new set and missing devices
 if $verbose
-  missing = $devices.dup  # devices that aren't connected now.
+  # The following will evolve into devices that are no longer connected,
+  # but are in the pool.
+  missing = $devices[:pool].dup
 end
 new_devices = []          # new available devices
 nconn = []                # newly connected
 dconn = $old_devices.dup  # recently disconnected
 adb_devices.each { |ser|
   # find this device in the pool of all supported devices
-  dev = find_device($devices, ser)
+  dev = find_device($devices[:pool], ser)
   if dev
     # got it.
     new_devices << dev
@@ -96,15 +95,21 @@ end
 
 
 # produce a new devices.rb with the currently connected devices only
-devices = File.join(File.dirname(bfn), 'lib', 'devices.rb')
+devices = File.join(File.dirname(bfn), 'lib', 'devices', 'connected.rb')
 
 File.open(devices, "wb") { |f|
-  f.puts "$devices = ["
+  f.puts "$devices[:connected] = ["
   new_devices.each { |dev|
     name = "'#{dev[:name]}',"
     serial = "'#{dev[:serial]}',"
 
-    f.puts "  { :name => %-16s :serial => %-24s }," % [name, serial]
+    line = "  { :name => %-16s :serial => %-24s" % [name, serial]
+    if dev[:codename]
+      line << ":codename => #{dev[:codename].inspect}"
+    end
+    line << " },"
+
+    f.puts line
   }
   f.puts "]"
 }
