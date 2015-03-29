@@ -1,20 +1,25 @@
 #
-# Android Cluster Toolkit - devices-orig.rb
+# Android Cluster Toolkit - pool.rb
 #
 # (c) 2012-2015 Joshua J. Drake (jduck)
 #
 
-$devices = [
+$devices[:pool] = [
 =begin
   #
   # The following Hash entry describes one device in the cluster.
   #
-  # The fields:
-  #   :name    -- a human friendly name, chosen by you
-  #   :serial  -- the device's serial number (from 'adb devices')
+  # Required fields:
+  #   :name     -- a human friendly name, chosen by you
+  #   :serial   -- the device's serial number (from 'adb devices')
+  #
+  # Optional fields:
+  #   :disabled -- disable the device from use
   #
   # Use the ./scan.rb script to generate a basis for new entries.
-  # Use ./reconfig.rb to turn this file into devices.rb
+  #
+  # Use ./reconfig.rb to generate devices/connected.rb based on which devices
+  # are actually connected.
   #
   {
     :name => 'g1', # htc g1
