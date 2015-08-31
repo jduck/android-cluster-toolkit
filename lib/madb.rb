@@ -157,8 +157,9 @@ def adb_scan(verbose = false)
 
     outlines.each { |ln|
       ln.chomp!
+      ln.strip!
       next if ln.length < 1
-      next if ln == "List of devices attached "
+      next if ln == "List of devices attached"
 
       parts = ln.split("\t")
       serial = parts.first
