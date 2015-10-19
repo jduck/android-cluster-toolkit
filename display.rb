@@ -27,8 +27,8 @@ adb_devices = adb_scan(true)
 
 # show devices in both sets
 $devices[:connected].each { |dev|
-  adb_devices.each { |ser|
-    if dev[:serial] == ser
+  adb_devices.each { |port,serial|
+    if dev[:serial] == serial
       puts "    #{dev[:name]} / #{dev[:serial]}"
       break
     end

@@ -10,7 +10,7 @@ require 'open3'
 require 'getoptlong'
 
 require 'plural'
-
+require 'config'
 
 #
 # set globals based on the command line options
@@ -141,34 +141,39 @@ end
 #
 def adb_scan(verbose = false)
   adb_devices = []
-  cmd = [ 'adb', 'devices' ]
-  Open3.popen3(*cmd) { |sin, sout, serr, thr|
-    pid = thr[:pid]
-    outlines = sout.readlines
-    errlines = serr.readlines
 
-    if errlines.length > 0
-      $stderr.puts "ERROR:"
+  $adb_ports.each { |port|
+    cmd = [ 'adb', '-P', port.to_s, 'devices' ]
+    Open3.popen3(*cmd) { |sin, sout, serr, thr|
+      pid = thr[:pid]
+      outlines = sout.readlines
+      errlines = serr.readlines
 
-      errlines.each { |ln|
-        $stderr.puts ln
+      if errlines.length > 0
+        $stderr.puts "ERROR:"
+
+        errlines.each { |ln|
+          $stderr.puts ln
+        }
+      end
+
+      outlines.each { |ln|
+        ln.chomp!
+        ln.strip!
+        next if ln.length < 1
+        next if ln == "List of devices attached"
+
+        parts = ln.split("\t")
+        serial = parts.first
+        adb_devices << [ port, serial ]
       }
-    end
-
-    outlines.each { |ln|
-      ln.chomp!
-      ln.strip!
-      next if ln.length < 1
-      next if ln == "List of devices attached"
-
-      parts = ln.split("\t")
-      serial = parts.first
-      adb_devices << serial
     }
   }
 
   if verbose
-    $stderr.puts "[*] Found #{adb_devices.length} device#{plural(adb_devices.length)} via 'adb devices'"
+    adl = adb_devices.length
+    apl = $adb_ports.length
+    $stderr.puts "[*] Found #{adl} device#{plural(adl)} on #{apl} server#{plural(apl)} via 'adb devices'"
   end
 
   return adb_devices

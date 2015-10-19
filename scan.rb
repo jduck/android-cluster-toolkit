@@ -15,9 +15,9 @@ end
 $:.unshift(File.join(File.dirname(bfn), 'lib'))
 
 
+# load connected set of devices
 require 'devices'
 load_connected(true)
-
 
 # get a list of devices via 'adb devices'
 require 'madb'
@@ -25,28 +25,28 @@ adb_devices = adb_scan(true)
 
 
 # intersect this with $devices
-new = []
-adb_devices.each { |ser|
+new_devices = []
+adb_devices.each { |port,serial|
   found = false
   $devices[:connected].each { |dev|
-    if dev[:serial] == ser
+    if dev[:serial] == serial
       found = true
       break
     end
   }
 
-  new << ser if not found
+  new_devices << [ port, serial ] if not found
 }
 
-$stderr.puts "[*] Found #{new.length} new device#{plural(new.length)}!"
+$stderr.puts "[*] Found #{new_devices.length} new device#{plural(new_devices.length)}!"
 
 
 # print any new ones in the format used to add to devices-orig.rb
-new.each { |ser|
+new_devices.each { |port,serial|
   puts %Q|
   {
     :name => 'name', # description
-    :serial => '#{ser}',
+    :serial => '#{serial}',
   },
 |
 }

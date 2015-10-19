@@ -17,7 +17,7 @@ $:.unshift(File.join(File.dirname(bfn), 'lib'))
 
 # get a list of devices via 'adb devices'
 require 'madb'
-new = adb_scan(true)
+adb_devices = adb_scan(true)
 
 
 device_pool = File.join(File.dirname(bfn), 'lib', 'devices', 'pool.rb')
@@ -34,11 +34,11 @@ File.open("#{device_pool}.sample", 'rb') { |f|
 
 File.open(device_pool, 'wb') { |f|
   f.puts template.split(/^=end$/).first + "=end"
-  new.each { |dev|
+  adb_devices.each { |port,serial|
     f.puts %Q|
   {
     :name => 'name', # description
-    :serial => '#{dev}',
+    :serial => '#{serial}',
   },
 |
   }

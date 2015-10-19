@@ -23,8 +23,16 @@ load_connected()
 dev = get_one_device(devid)
 
 
-puts "[*] starting shell for #{dev[:name]} (ANDROID_SERIAL=\"#{dev[:serial]}\") ..."
-ENV["ANDROID_SERIAL"] = dev[:serial]
-ENV["debian_chroot"] = dev[:name]
+# build the environment vars to set...
+envs = get_device_envs(dev)
+envstr = get_device_env_str(envs)
 
+# show!
+puts "[*] starting shell for #{dev[:name]} (#{envstr}) ..."
+
+# add one final var and apply them.
+envs.merge!("debian_chroot" => dev[:name])
+envs.each { |k,v| ENV[k] = v }
+
+# spawn the shell!
 system(ENV['SHELL']) #, '--norc')

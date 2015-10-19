@@ -49,11 +49,12 @@ end
 new_devices = []          # new available devices
 nconn = []                # newly connected
 dconn = $old_devices.dup  # recently disconnected
-adb_devices.each { |ser|
+adb_devices.each { |port,serial|
   # find this device in the pool of all supported devices
-  dev = find_device($devices[:pool], ser)
+  dev = find_device($devices[:pool], serial)
   if dev
     # got it.
+    dev.merge!(:port => port)
     new_devices << dev
 
     # it's not missing.
@@ -61,7 +62,7 @@ adb_devices.each { |ser|
   end
 
   # see if this one was present before...
-  pdev = find_device($old_devices, ser)
+  pdev = find_device($old_devices, serial)
 
   # if so, it didn't disconnect :)
   if pdev
@@ -102,8 +103,7 @@ File.open(devices, "wb") { |f|
   new_devices.each { |dev|
     name = "'#{dev[:name]}',"
     serial = "'#{dev[:serial]}',"
-
-    line = "  { :name => %-16s :serial => %-24s" % [name, serial]
+    line = "  { :name => %-16s :serial => %-24s :port => %u" % [name, serial, dev[:port]]
     if dev[:codename]
       line << ":codename => #{dev[:codename].inspect}"
     end
