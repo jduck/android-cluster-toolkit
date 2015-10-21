@@ -245,7 +245,7 @@ def multi_adb(base = nil, argv = nil)
     if $one_line
       print_col_prefix(dev)
 
-      args = [ '-s', dev[:serial] ]
+      args = [ '-s', dev[:serial], '-P', dev[:port].to_s ]
       args += base if base
       args += argv
       puts adb_get_lines(args).join("\\n")
@@ -254,7 +254,7 @@ def multi_adb(base = nil, argv = nil)
       print_col_prefix(dev)
       puts ""
 
-      cmd = [ 'adb', '-s', dev[:serial] ]
+      cmd = [ 'adb', '-s', dev[:serial], '-P', dev[:port].to_s ]
       cmd += base if base
       cmd += argv
       system(*cmd)

@@ -79,7 +79,7 @@ end
 # build the environment vars to set...
 def get_device_envs(dev)
   envs = { "ANDROID_SERIAL" => dev[:serial] }
-  envs.merge!("ANDROID_ADB_SERVER_PORT" => dev[:port].to_s) if dev[:port] != 5037 # not the default port
+  envs.merge!("ANDROID_ADB_SERVER_PORT" => dev[:port].to_s)
   return envs
 end
 
