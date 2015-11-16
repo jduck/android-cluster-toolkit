@@ -162,6 +162,7 @@ def adb_scan(verbose = false)
         ln.strip!
         next if ln.length < 1
         next if ln == "List of devices attached"
+        next if ln[0,1] == "*"
 
         parts = ln.split("\t")
         serial = parts.first
